@@ -496,7 +496,7 @@ class GrepTestCase(TestCase):
         gzip_file = gzip.GzipFile("made-up-file.gz", mode="rb", fileobj=BytesIO(gzip_text_compressed_trailing_garbage))
         gt = grin.GrepText(re.compile("ni"))
         self.assertRaises(
-            gzip.BadGzipFile,
+            OSError,
             gt.do_grep,
             gzip_file,
         )

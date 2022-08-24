@@ -414,12 +414,9 @@ def main(argv=None):
         for filename, kind in get_filenames(args):
             try:
                 report = g.grep_a_file(filename, opener=openers[kind], encoding=args.encoding)
-            except (gzip.BadGzipFile, EOFError) as ex:
+            except (OSError, EOFError):
                 if kind != "gzip":
-                    # probably shouldn't happen; something weird
-                    raise
-                # Alert the user, or just silently switch to plaintext grep?
-                print(f"{filename}: {ex}; retrying as plaintext.", file=sys.stderr)
+                    raise  # probably shouldn't happen; something weird
                 report = g.grep_a_file(filename, opener=openers["text"], encoding=args.encoding)
             sys.stdout.write(report)
     except KeyboardInterrupt:
