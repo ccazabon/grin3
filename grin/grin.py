@@ -32,6 +32,7 @@ import os
 import re
 import shlex
 import sys
+import zlib
 
 from .main import GrepText
 from .recognizer import get_recognizer
@@ -414,7 +415,7 @@ def main(argv=None):
         for filename, kind in get_filenames(args):
             try:
                 report = g.grep_a_file(filename, opener=openers[kind], encoding=args.encoding)
-            except (OSError, EOFError):
+            except (OSError, EOFError, zlib.error):
                 if kind != "gzip":
                     raise  # probably shouldn't happen; something weird
                 report = g.grep_a_file(filename, opener=openers["text"], encoding=args.encoding)
